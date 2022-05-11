@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import uz.yt.springdata.dao.Publisher;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 
 @Data
@@ -20,12 +20,12 @@ public class BookDTO {
     private String name;
     private BigDecimal cost;
     private String genre;
-    private Date publishedDate;
+    private String publishedDate;
     private Integer pageCount;
     private AuthorDTO author;
     private PublisherDTO publisherDTO;
 
-    public BookDTO(Integer id, String name, BigDecimal cost, String genre, Date publishedDate, Integer pageCount) {
+    public BookDTO(Integer id, String name, BigDecimal cost, String genre, String publishedDate, Integer pageCount) {
         this.id = id;
         this.name = name;
         this.cost = cost;

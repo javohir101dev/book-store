@@ -3,6 +3,9 @@ package uz.yt.springdata.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uz.yt.springdata.helper.Validator;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -12,4 +15,12 @@ public class ResponseDTO<T> {
     private Integer code;
     private String message;
     private T data;
+    private List<ValidatorDTO> errors;
+
+    public ResponseDTO(boolean success, Integer code, String message, T data) {
+        this.success = success;
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
 }

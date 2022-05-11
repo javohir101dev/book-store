@@ -1,5 +1,6 @@
 package uz.yt.springdata.dao;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import java.sql.Date;
 })
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Book {
 
     @Id
@@ -54,12 +56,12 @@ public class Book {
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 
-    public Book(Integer id, String nameUz, BigDecimal cost, Author authorId, String genre) {
+    public Book(Integer id, String nameUz, BigDecimal cost, Date publishedDate, Integer pageCount, String genre) {
         this.id = id;
         this.nameUz = nameUz;
         this.cost = cost;
-        this.authorId = authorId;
+        this.publishedDate = publishedDate;
+        this.pageCount = pageCount;
         this.genre = genre;
     }
-
 }

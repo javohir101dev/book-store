@@ -7,6 +7,7 @@ import uz.yt.springdata.dao.Book;
 import uz.yt.springdata.dto.AuthorDTO;
 import uz.yt.springdata.dto.BookDTO;
 import uz.yt.springdata.dto.PublisherDTO;
+import uz.yt.springdata.helper.DateHelper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class BookMapping {
                 book.getNameUz(),
                 book.getCost(),
                 book.getGenre(),
-                book.getPublishedDate(),
+                DateHelper.toString(book.getPublishedDate()),
                 book.getPageCount());
         bookDTO.setPublisherDTO(PublisherMapping.toDto(book.getPublisher(), tier+1));
         bookDTO.setAuthor(AuthorMapping.toDto(book.getAuthorId(), tier+1));
@@ -31,7 +32,8 @@ public class BookMapping {
         return  new Book(bookDTO.getId(),
                     bookDTO.getName(),
                     bookDTO.getCost(),
-                null,
+                DateHelper.toDate(bookDTO.getPublishedDate()),
+                bookDTO.getPageCount(),
                 bookDTO.getGenre());
     }
 

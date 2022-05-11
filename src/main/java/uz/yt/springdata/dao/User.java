@@ -3,6 +3,7 @@ package uz.yt.springdata.dao;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "Users")
@@ -21,7 +22,7 @@ public class User {
     @Column(name = "phoneNumber")
     private String phoneNumber;
     @Column(name = "account")
-    private String account;
+    private BigDecimal account;
     @Column(name = "password")
     private String password;
     @Column(name = "username")

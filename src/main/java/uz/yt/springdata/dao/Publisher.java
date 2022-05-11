@@ -1,6 +1,8 @@
 package uz.yt.springdata.dao;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -8,6 +10,8 @@ import java.util.List;
 @Entity
 @Table(name = "publisher")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Publisher {
 
     @Id
@@ -24,4 +28,9 @@ public class Publisher {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "publisher")
     private List<Book> books;
+
+    public Publisher(Integer id, String name){
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -27,4 +27,9 @@ public class AuthorMapping {
                 list
         );
     }
+
+    public static Author toEntity(AuthorDTO author){
+        return author == null ? null :
+                new Author(author.getId(), author.getFirstName(), author.getLastName(), author.getBirthDate());
+    }
 }

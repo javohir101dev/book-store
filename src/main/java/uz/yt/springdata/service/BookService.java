@@ -11,13 +11,19 @@ import org.springframework.util.MultiValueMap;
 import uz.yt.springdata.dao.Author;
 import uz.yt.springdata.dao.Book;
 import uz.yt.springdata.dao.CustomBook;
+import uz.yt.springdata.dao.Publisher;
 import uz.yt.springdata.dto.BookDTO;
 import uz.yt.springdata.dto.ResponseDTO;
+import uz.yt.springdata.dto.ValidatorDTO;
 import uz.yt.springdata.helper.NumberHelper;
 import uz.yt.springdata.helper.StringHelper;
+import uz.yt.springdata.helper.Validator;
+import uz.yt.springdata.helper.constants.AppResponseCode;
+import uz.yt.springdata.helper.constants.AppResponseMessages;
 import uz.yt.springdata.mapping.BookMapping;
 import uz.yt.springdata.repository.AuthorRepository;
 import uz.yt.springdata.repository.BookRepository;
+import uz.yt.springdata.repository.PublisherRepository;
 import uz.yt.springdata.repository.impl.BookRepositoryImpl;
 
 import java.math.BigDecimal;
@@ -33,20 +39,37 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookRepositoryImpl bookRepositoryImpl;
     private final AuthorRepository authorRepository;
+    private final PublisherRepository publisherRepository;
 
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<BookDTO> addNew(BookDTO bookDTO){
         try {
+            List<ValidatorDTO> errors = Validator.validateBook(bookDTO);
+            if (errors.size() > 0) return new ResponseDTO<>(false, AppResponseCode.VALIDATION_ERROR, AppResponseMessages.VALIDATION_ERROR, bookDTO, errors);
+
             Book book = BookMapping.toEntity(bookDTO);
             book.setId(null);
+
+            Optional<Author> author = authorRepository.findById(bookDTO.getAuthor().getId());
+            if (!author.isPresent()){
+                return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND, bookDTO, List.of(new ValidatorDTO("authorId", AppResponseMessages.NOT_FOUND)));
+            }
+
+            Optional<Publisher> publisher = publisherRepository.findById(bookDTO.getPublisherDTO().getId());
+            if (!publisher.isPresent()){
+                return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND, bookDTO, List.of(new ValidatorDTO("publisherId", AppResponseMessages.NOT_FOUND)));
+            }
+
+            book.setAuthorId(author.get());
+            book.setPublisher(publisher.get());
+
             bookRepository.save(book);
 
-            authorRepository.save(new Author());
-            return new ResponseDTO<>(true, 0, "OK", BookMapping.toDto(book, 1));
+            return new ResponseDTO<>(true, AppResponseCode.OK, AppResponseMessages.OK, BookMapping.toDto(book, 1), null);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseDTO<>(false, -1, "ERROR in saving", null);
+            return new ResponseDTO<>(false, AppResponseCode.DATABASE_ERROR, AppResponseMessages.DATABASE_ERROR, null, null);
         }
     }
 
