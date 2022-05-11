@@ -31,7 +31,7 @@ public class BookMapping {
         return  new Book(bookDTO.getId(),
                     bookDTO.getName(),
                     bookDTO.getCost(),
-                new Author(),
+                null,
                 bookDTO.getGenre());
     }
 

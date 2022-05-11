@@ -12,12 +12,19 @@ import java.sql.Date;
 @NamedQuery(name = "Book.findByAuthorName",
     query = "select b from Book b where b.authorId.firstName like ?1" //JPQL - Java Persistence Query Language
 )
+@NamedStoredProcedureQuery(name="Book.countBooks",
+        procedureName = "orderr",
+        parameters = {
+                @StoredProcedureParameter(name = "num1", mode = ParameterMode.IN, type = Integer.class),
+                @StoredProcedureParameter(name = "num2", mode = ParameterMode.IN, type = Integer.class)
+})
 @Data
 @NoArgsConstructor
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "book_id_seq")
+    @SequenceGenerator(name = "book_id_seq", sequenceName = "book_id_seq", allocationSize = 1)
     @Column(name = "id")
     private Integer id;
 
