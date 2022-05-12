@@ -1,6 +1,8 @@
 package uz.yt.springdata.dao;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,6 +10,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "Users")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -27,4 +31,7 @@ public class User {
     private String password;
     @Column(name = "username")
     private String username;
+
+
+
 }

@@ -12,7 +12,9 @@ import java.util.stream.Collectors;
 public class AuthorMapping {
 
     public static AuthorDTO toDto(Author entity, int tier){
+
         if (tier > 1) return null;
+
         List<BookDTO> list = entity.getBooks()
                 .stream()
                 .map(a -> BookMapping.toDto(a, tier+1))

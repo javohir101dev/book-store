@@ -44,21 +44,25 @@ public class BookService {
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<BookDTO> addNew(BookDTO bookDTO){
+
         try {
             List<ValidatorDTO> errors = Validator.validateBook(bookDTO);
-            if (errors.size() > 0) return new ResponseDTO<>(false, AppResponseCode.VALIDATION_ERROR, AppResponseMessages.VALIDATION_ERROR, bookDTO, errors);
+            if (errors.size() > 0) return new ResponseDTO<>(false, AppResponseCode.VALIDATION_ERROR,
+                    AppResponseMessages.VALIDATION_ERROR, bookDTO, errors);
 
             Book book = BookMapping.toEntity(bookDTO);
             book.setId(null);
 
             Optional<Author> author = authorRepository.findById(bookDTO.getAuthor().getId());
             if (!author.isPresent()){
-                return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND, bookDTO, List.of(new ValidatorDTO("authorId", AppResponseMessages.NOT_FOUND)));
+                return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND,
+                        bookDTO, List.of(new ValidatorDTO("authorId", AppResponseMessages.NOT_FOUND)));
             }
 
             Optional<Publisher> publisher = publisherRepository.findById(bookDTO.getPublisherDTO().getId());
             if (!publisher.isPresent()){
-                return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND, bookDTO, List.of(new ValidatorDTO("publisherId", AppResponseMessages.NOT_FOUND)));
+                return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND,
+                        bookDTO, List.of(new ValidatorDTO("publisherId", AppResponseMessages.NOT_FOUND)));
             }
 
             book.setAuthorId(author.get());
@@ -66,10 +70,15 @@ public class BookService {
 
             bookRepository.save(book);
 
-            return new ResponseDTO<>(true, AppResponseCode.OK, AppResponseMessages.OK, BookMapping.toDto(book, 1), null);
+            return new ResponseDTO<>(true,
+                    AppResponseCode.OK,
+                    AppResponseMessages.OK,
+                    BookMapping.toDto(book, 1),
+                    null);
         }catch (Exception e){
             e.printStackTrace();
-            return new ResponseDTO<>(false, AppResponseCode.DATABASE_ERROR, AppResponseMessages.DATABASE_ERROR, null, null);
+            return new ResponseDTO<>(false, AppResponseCode.DATABASE_ERROR,
+                    AppResponseMessages.DATABASE_ERROR, null, null);
         }
     }
 

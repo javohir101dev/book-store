@@ -13,4 +13,9 @@ public class StringHelper {
             return false;
         }
     }
+
+
+    public static boolean isValidField(String fieldName){
+         return fieldName == null || fieldName.trim().length() < 1;
+    }
 }

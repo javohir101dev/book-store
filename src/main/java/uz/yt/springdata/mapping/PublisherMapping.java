@@ -15,13 +15,15 @@ public class PublisherMapping {
 
     public static PublisherDTO toDto(Publisher publisher, int tier){
         if (tier > 1) return null;
+
         List<BookDTO> list = publisher.getBooks()
                 .stream()
                 .map(a -> BookMapping.toDto(a, tier+1))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        return new PublisherDTO(publisher.getId(),
+        return new PublisherDTO(
+                publisher.getId(),
                 publisher.getName(),
                 AddressMapping.toDto(publisher.getAddress()),
                 list);

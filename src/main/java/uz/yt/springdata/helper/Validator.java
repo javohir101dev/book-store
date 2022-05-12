@@ -3,7 +3,9 @@ package uz.yt.springdata.helper;
 import org.springframework.data.domain.PageRequest;
 import uz.yt.springdata.dto.BookDTO;
 import uz.yt.springdata.dto.PublisherDTO;
+import uz.yt.springdata.dto.UserDTO;
 import uz.yt.springdata.dto.ValidatorDTO;
+import uz.yt.springdata.helper.constants.AppResponseCode;
 import uz.yt.springdata.helper.constants.AppResponseMessages;
 
 import java.util.ArrayList;
@@ -11,14 +13,17 @@ import java.util.List;
 
 public class Validator {
 
-    public static List<ValidatorDTO> validateBook(BookDTO bookDTO){
-        List<ValidatorDTO> errors = new ArrayList<>();
+    static List<ValidatorDTO> errors = new ArrayList<>();
 
-        if (bookDTO.getName() == null || bookDTO.getName().trim().length() < 1){
+    public static List<ValidatorDTO> validateBook(BookDTO bookDTO){
+
+       errors.clear();
+
+        if (StringHelper.isValidField(bookDTO.getName())){
             errors.add(new ValidatorDTO("name", AppResponseMessages.EMPTY_FIELD));
         }
 
-        if (bookDTO.getGenre() == null || bookDTO.getGenre().trim().length() < 1){
+        if (StringHelper.isValidField(bookDTO.getGenre())){
             errors.add(new ValidatorDTO("genre", AppResponseMessages.EMPTY_FIELD));
         }
 
@@ -45,6 +50,37 @@ public class Validator {
         }
         if (bookDTO.getPublisherDTO() == null || bookDTO.getPublisherDTO().getId() == null){
             errors.add(new ValidatorDTO(PublisherDTO.class.getSimpleName(), AppResponseMessages.EMPTY_FIELD));
+        }
+
+        return errors;
+    }
+
+    public static List<ValidatorDTO> validateUser(UserDTO userDTO) {
+
+        errors.clear();
+
+        if (StringHelper.isValidField(userDTO.getFirstName())){
+            errors.add(new ValidatorDTO("firstname", AppResponseMessages.EMPTY_FIELD));
+        }
+
+        if (StringHelper.isValidField(userDTO.getLastName())){
+            errors.add(new ValidatorDTO("lastname", AppResponseMessages.EMPTY_FIELD));
+        }
+
+        if (StringHelper.isValidField(userDTO.getPhoneNumber())){
+            errors.add(new ValidatorDTO("phoneNumber", AppResponseMessages.EMPTY_FIELD));
+        }
+
+        if (userDTO.getAccount().doubleValue() < 0 ){
+            errors.add(new ValidatorDTO("account", AppResponseMessages.MINUS_VALUE));
+        }
+
+        if (StringHelper.isValidField(userDTO.getPassword())){
+            errors.add(new ValidatorDTO("password", AppResponseMessages.EMPTY_FIELD));
+        }
+
+        if (StringHelper.isValidField(userDTO.getUsername())){
+            errors.add(new ValidatorDTO("username", AppResponseMessages.EMPTY_FIELD));
         }
 
         return errors;

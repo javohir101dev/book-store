@@ -16,12 +16,14 @@ public class BookMapping {
 
     public static BookDTO toDto(Book book, int tier){
         if (tier > 1) return null;
+
         BookDTO bookDTO = new BookDTO(book.getId(),
                 book.getNameUz(),
                 book.getCost(),
                 book.getGenre(),
                 DateHelper.toString(book.getPublishedDate()),
                 book.getPageCount());
+
         bookDTO.setPublisherDTO(PublisherMapping.toDto(book.getPublisher(), tier+1));
         bookDTO.setAuthor(AuthorMapping.toDto(book.getAuthorId(), tier+1));
 
