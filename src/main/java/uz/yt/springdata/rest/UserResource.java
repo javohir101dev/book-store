@@ -19,19 +19,19 @@ public class UserResource {
     }
 
 //    CREATE
-    @PostMapping("/add")
+    @PostMapping
     public ResponseDTO<UserDTO> addUser(@RequestBody UserDTO userDTO){
         return userService.addUser(userDTO);
     }
 
 //    READ
-    @GetMapping("/get-one/{id}")
+    @GetMapping("/{id}")
     public ResponseDTO<UserDTO> getUserById(@PathVariable Integer id){
         return  userService.getUserById(id);
     }
 
 
-    @GetMapping("/all-page")
+    @GetMapping
     public ResponseDTO<Page<User>>  getAllUsersPage(
             @RequestParam(name = "size", defaultValue = "5" ) Integer size,
             @RequestParam(name = "page", defaultValue = "0" ) Integer page){
@@ -39,13 +39,13 @@ public class UserResource {
     }
 
 //    UPDATE
-    @PutMapping("edit")
+    @PutMapping
     public ResponseDTO<UserDTO> editUser(@RequestBody UserDTO userDTO){
         return userService.editUser(userDTO);
     }
 
 //    DELETE
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseDTO<UserDTO> deleteUser(@PathVariable Integer id){
         return userService.deleteUser(id);
     }

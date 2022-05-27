@@ -34,7 +34,7 @@ public class BookResource {
     }
 
     @PostMapping
-    @PreAuthorize(value = "hasAnyAuthority('ROLE_ADMIN', 'ROLE_BOOK_MANAGER')")
+    @PreAuthorize(value = "hasAnyAuthority('BOOK:CREATE', 'ROLE_BOOK_MANAGER')")
     public ResponseDTO<BookDTO> add(@RequestBody BookDTO bookDTO){
 
         return bookService.addNew(bookDTO);

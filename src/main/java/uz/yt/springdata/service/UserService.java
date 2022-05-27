@@ -3,12 +3,11 @@ package uz.yt.springdata.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import uz.yt.springdata.dao.User;
-import uz.yt.springdata.dto.BookDTO;
-import uz.yt.springdata.dto.ResponseDTO;
-import uz.yt.springdata.dto.UserDTO;
-import uz.yt.springdata.dto.ValidatorDTO;
+import uz.yt.springdata.dto.*;
 import uz.yt.springdata.helper.Validator;
 import uz.yt.springdata.helper.constants.AppResponseCode;
 import uz.yt.springdata.helper.constants.AppResponseMessages;
@@ -25,6 +24,14 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JdbcUserDetailsManager userDetailsManager;
+
+//    public ResponseDTO<String> add(UserDTO userDTO){
+//
+//        UserInfoDTO user = org.springframework.security.core.userdetails.User.withUsername(userDTO.getUsername())
+//                .password(userDTO.getPassword()).build();
+//
+//    }
 
     public ResponseDTO<UserDTO> addUser(UserDTO userDTO) {
 
