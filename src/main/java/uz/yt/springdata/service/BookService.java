@@ -25,6 +25,7 @@ import uz.yt.springdata.repository.AuthorRepository;
 import uz.yt.springdata.repository.BookRepository;
 import uz.yt.springdata.repository.PublisherRepository;
 import uz.yt.springdata.repository.impl.BookRepositoryImpl;
+import uz.yt.springdata.scheduling.ScheduleExample;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
