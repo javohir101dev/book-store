@@ -1,32 +1,34 @@
 package uz.yt.springdata.security;
 
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import uz.yt.springdata.service.UserDetailsServiceImpl;
 
 import javax.sql.DataSource;
 
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableWebSecurity
 @Configuration
+@EnableWebSecurity
 public class SecurityConfiguration{
 
     @Autowired
-    private DataSource dataSource;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/book").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -36,41 +38,33 @@ public class SecurityConfiguration{
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    protected DataSource dataSource(){
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        dataSource.setPassword("imueaa0131");
+        dataSource.setUsername("postgres");
+
+        return dataSource;
     }
 
     @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) {
         auth
-                .jdbcAuthentication()
-                .dataSource(dataSource);
+                .authenticationProvider(provider());
     }
 
     @Bean
-    public JdbcUserDetailsManager muhammadali(){
-        JdbcUserDetailsManager jdbc = new JdbcUserDetailsManager();
-        jdbc.setDataSource(dataSource);
-        jdbc.setCreateUserSql("insert into users(firstname, lastname, phonenumber, account, password, username, phone_number, enabled) " +
-                "values(?,?,?,?,?,?,?,?)");
-        return jdbc;
+    public AuthenticationProvider provider(){
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+
+        return provider;
     }
 
-    //    @Bean
-//    public InMemoryUserDetailsManager muhammadali(){
-//        UserDetails userDetails = User.withUsername("user")
-//                .password(passwordEncoder().encode("123"))
-////                .roles("USER")
-//                .authorities(GUEST.getPermissions())
-//                .build();
-//
-//        UserDetails userDetails2 = User.withUsername("admin")
-//                .password(passwordEncoder().encode("admin"))
-////                .roles("USER")
-//                .authorities(ADMIN.getPermissions())
-//                .build();
-//
-//
-//        return new InMemoryUserDetailsManager(userDetails,  userDetails2);
-//    }
+    @Bean
+    protected PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 }

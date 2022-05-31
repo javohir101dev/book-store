@@ -24,7 +24,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final JdbcUserDetailsManager userDetailsManager;
 
 //    public ResponseDTO<String> add(UserDTO userDTO){
 //
