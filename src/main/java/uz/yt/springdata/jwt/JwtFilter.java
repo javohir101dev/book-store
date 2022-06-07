@@ -1,60 +1,70 @@
 package uz.yt.springdata.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import io.lettuce.core.dynamic.annotation.CommandNaming;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uz.yt.springdata.dto.UserInfoDTO;
+import uz.yt.springdata.dao.User;
 import uz.yt.springdata.redis.UserSession;
-import uz.yt.springdata.redis.UserSessionRepository;
+import uz.yt.springdata.redis.UserSessionRedisRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserSessionRepository userSessionRepository;
+    private UserSessionRedisRepository userSessionRedisRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String auth = request.getHeader("Authorization");
-        if (auth != null && auth.startsWith("Bearer ")){
+        if (auth != null && auth.startsWith("Bearer ")) {
             String token = auth.substring(7);
-            String uuid = jwtUtil.getSubject(token);
-            Optional<UserSession> userSession = userSessionRepository.findById(uuid);
-            if (!userSession.isPresent()){
+            try {
+                String uuid = jwtUtil.validateTokenAndGetSubject(token);
+                if (uuid == null){
+                    throw new RuntimeException("Invalid token or cannot parse");
+                }
+                Optional<UserSession> userSession = userSessionRedisRepository.findById(uuid);
+                if (!userSession.isPresent()) {
+                    SecurityContextHolder.getContext().setAuthentication(null);
+                    throw new RuntimeException("Token is expired or invalid");
+                }
+                String cachedUserString = userSession.get().getUserInfo();
+                User user = fromStringToUser(cachedUserString);
+                UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(
+                        user,
+                        null,
+                        user.getAuthorities()
+                );
+                SecurityContextHolder.getContext().setAuthentication(userToken);
+            } catch (Exception e) {
+                log.warn("Invalid token with error: {}", e.getMessage());
                 SecurityContextHolder.getContext().setAuthentication(null);
+                response.setStatus(HttpStatus.FORBIDDEN.value());
             }
-
-            String userInfoStr = userSession.get().getUserInfo();
-            UserInfoDTO userInfoDTO = new ObjectMapper().readValue(userInfoStr, UserInfoDTO.class);
-
-
-            UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(
-                    userInfoDTO,
-                    null,
-                    userInfoDTO.getAuthorities()
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(userToken);
-
-        }else {
+        } else {
             SecurityContextHolder.getContext().setAuthentication(null);
         }
-
-
         filterChain.doFilter(request, response);
     }
+
+    private User fromStringToUser(String userCacheString){
+        return new Gson().fromJson(userCacheString, User.class);
+    }
+
 }

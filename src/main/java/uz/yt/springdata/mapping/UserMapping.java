@@ -10,13 +10,13 @@ public class UserMapping {
 
         return userDTO == null ? null :
                 new User(userDTO.getId(),
-                userDTO.getFirstName(),
-                userDTO.getLastName(),
-                userDTO.getPhoneNumber(),
-                userDTO.getAccount(),
-                userDTO.getPassword(),
-                userDTO.getUsername()
-        );
+                        userDTO.getFirstName(),
+                        userDTO.getLastName(),
+                        userDTO.getPhoneNumber(),
+                        userDTO.getAccount(),
+                        userDTO.getUsername(),
+                        userDTO.getPassword()
+                );
 
     }
 
@@ -28,8 +28,7 @@ public class UserMapping {
                         user.getLastName(),
                         user.getPhoneNumber(),
                         user.getAccount(),
-                        user.getUsername(),
-                        user.getPassword()
+                        user.getUsername()
                 );
     }
 }

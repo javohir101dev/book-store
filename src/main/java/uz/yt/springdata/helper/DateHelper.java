@@ -26,7 +26,6 @@ public class DateHelper {
 
     public static String toString(Date date){
         if (date == null) return "";
-        System.out.println(date);
         return new SimpleDateFormat("yyyy-MM-dd").format(date);
     }
 }

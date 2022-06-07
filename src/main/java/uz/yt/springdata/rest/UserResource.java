@@ -3,7 +3,6 @@ package uz.yt.springdata.rest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import uz.yt.springdata.dao.User;
-import uz.yt.springdata.dto.BookDTO;
 import uz.yt.springdata.dto.ResponseDTO;
 import uz.yt.springdata.dto.UserDTO;
 import uz.yt.springdata.service.UserService;
@@ -18,7 +17,7 @@ public class UserResource {
         this.userService = userService;
     }
 
-//    CREATE
+//    CREATE  LOGIN
     @PostMapping
     public ResponseDTO<UserDTO> addUser(@RequestBody UserDTO userDTO){
         return userService.addUser(userDTO);

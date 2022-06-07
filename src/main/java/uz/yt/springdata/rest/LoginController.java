@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uz.yt.springdata.dto.ResponseDTO;
 import uz.yt.springdata.dto.UserDTO;
+import uz.yt.springdata.dto.UserLoginDto;
 import uz.yt.springdata.service.UserDetailsServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class LoginController {
     private UserDetailsServiceImpl userDetailsService;
 
     @PostMapping
-    public ResponseDTO<String> login(@RequestBody UserDTO userDTO, HttpServletRequest request) {
-        return userDetailsService.getToken(userDTO, request);
+    public ResponseDTO<String> login(@RequestBody UserLoginDto userLoginDto, HttpServletRequest request) {
+        return userDetailsService.getToken(userLoginDto, request);
     }
 }

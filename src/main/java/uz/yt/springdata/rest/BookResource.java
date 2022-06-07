@@ -22,7 +22,8 @@ public class BookResource {
     private final BookService bookService;
 
     @GetMapping
-    public ResponseDTO<Page<BookDTO>> getAll(@RequestParam Integer size, @RequestParam Integer page){
+    public ResponseDTO<Page<BookDTO>> getAll(@RequestParam(defaultValue = "5") Integer size,
+                                             @RequestParam(defaultValue = "0") Integer page){
         return bookService.getAllBooks(size, page);
     }
 

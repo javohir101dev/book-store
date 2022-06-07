@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
 
+
 import javax.persistence.Id;
 
-@RedisHash(value = "userSession", timeToLive = 60 * 5)
+@RedisHash(value = "userSession", timeToLive = 60 * 10)  // 10 minutes
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

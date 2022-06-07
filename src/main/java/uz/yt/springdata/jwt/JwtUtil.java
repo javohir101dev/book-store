@@ -3,6 +3,7 @@ package uz.yt.springdata.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -26,16 +27,24 @@ public class JwtUtil {
     }
 
     public Claims getClaims(String token){
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(secretKey)
-                .build()//parser
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()//parser
                     .parseClaimsJws(token)
                     .getBody();
     }
 
-    public String getSubject(String token){
-        return getClaims(token).getSubject();
+    /**
+     * Returns null if token is invalid
+     * @return String or null
+     */
+    public String validateTokenAndGetSubject(String token){
+        try {
+            return getClaims(token).getSubject();
+        }catch (Exception e){
+            return null;
+        }
     }
 
 
