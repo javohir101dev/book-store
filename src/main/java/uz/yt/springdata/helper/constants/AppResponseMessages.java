@@ -10,5 +10,6 @@ public class AppResponseMessages {
     public static final String DATABASE_ERROR = "Ma'lumotlar bazasi bilan bog'lanishda xatolik";
     public static final String OK = "OK";
     public static final String DATE_FORMAT_YYYY_MM_DD = "Sana formati yyyy-MM-dd ga mos emas";
+    public static final String MISMATCH = "Ma'lumotlar mos kelmadi";
 
 }

@@ -9,16 +9,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import java.util.Date;
 
 @Configuration
-@EnableScheduling
+//@EnableScheduling
 public class ScheduleExample {
     
     private final static Logger logger = LoggerFactory.getLogger(ScheduleExample.class);
 
-    @Scheduled(cron = "* * * * * *")
-    public void print() throws InterruptedException {
-        logger.info("Time1: {}", new Date());
-        Thread.sleep(1000);
-    }
+//    @Scheduled(cron = "* * * * * *")
+//    public void print() throws InterruptedException {
+//        logger.info("Time1: {}", new Date());
+//        Thread.sleep(1000);
+//    }
 
 //    @Scheduled()
 //    void print2() throws InterruptedException {

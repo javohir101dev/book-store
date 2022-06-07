@@ -7,10 +7,9 @@ import uz.yt.springdata.auth.UserPermissions;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class UserInfoDTO extends UserDTO implements UserDetails{
-    private Set<GrantedAuthority> permissions;
+    private Set<SimpleGrantedAuthority> permissions;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -47,7 +46,7 @@ public class UserInfoDTO extends UserDTO implements UserDetails{
         return true;
     }
 
-    public void setPermissions(Set<GrantedAuthority> permissions) {
+    public void setPermissions(Set<SimpleGrantedAuthority> permissions) {
         this.permissions = permissions;
     }
 }

@@ -30,7 +30,6 @@ public class UserResource {
         return  userService.getUserById(id);
     }
 
-
     @GetMapping
     public ResponseDTO<Page<User>>  getAllUsersPage(
             @RequestParam(name = "size", defaultValue = "5" ) Integer size,
@@ -50,7 +49,11 @@ public class UserResource {
         return userService.deleteUser(id);
     }
 
-
-
+    @PostMapping("/change-password")
+    public ResponseDTO<UserDTO> changePassword(@RequestParam String username,
+                                               @RequestParam String oldPassword,
+                                               @RequestParam String newPassword){
+        return userService.changePassword(username, oldPassword, newPassword);
+    }
 
 }

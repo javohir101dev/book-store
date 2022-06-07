@@ -136,6 +136,11 @@ public class BookService {
     }
 
     public ResponseDTO<?> getAllWithParam(MultiValueMap<String, String> params) {
-        return new ResponseDTO<>(true, 0, "OK", bookRepositoryImpl.getAllBooksByParam(params).get());
+        Object responseDTO = bookRepositoryImpl.getAllBooksByParam(params).get();
+        if (responseDTO instanceof Page){
+            return new ResponseDTO<>(true, 99, "OK", responseDTO);
+        }
+
+        return new ResponseDTO<>(true, 0, "OK", responseDTO);
     }
 }

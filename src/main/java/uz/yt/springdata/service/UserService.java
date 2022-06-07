@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import uz.yt.springdata.dao.User;
@@ -23,6 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final PasswordEncoder encoder;
     private final UserRepository userRepository;
 
 //    public ResponseDTO<String> add(UserDTO userDTO){
@@ -171,5 +173,24 @@ public class UserService {
                     null);
         }
 
+    }
+
+    public ResponseDTO<UserDTO> changePassword(String username, String oldPassword, String newPassword) {
+        Optional<User> user = userRepository.findFirstByUsername(username);
+        if (!user.isPresent()){
+            return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND, null);
+        }
+
+        User u = user.get();
+
+        if(!encoder.matches(oldPassword, u.getPassword()) || oldPassword.equals(newPassword)){
+            return new ResponseDTO<>(false, AppResponseCode.VALIDATION_ERROR, AppResponseMessages.MISMATCH, null);
+        }
+
+        u.setPassword(encoder.encode(newPassword));
+
+        userRepository.save(u);
+
+        return new ResponseDTO<>(true, AppResponseCode.OK, AppResponseMessages.OK, UserMapping.toDto(u));
     }
 }

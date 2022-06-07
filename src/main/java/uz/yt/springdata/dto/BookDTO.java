@@ -1,15 +1,10 @@
 package uz.yt.springdata.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.money.Money;
-import org.springframework.context.annotation.Lazy;
-import uz.yt.springdata.dao.Publisher;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 
 
 @Data
