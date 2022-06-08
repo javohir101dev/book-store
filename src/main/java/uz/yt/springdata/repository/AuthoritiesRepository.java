@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface AuthoritiesRepository extends JpaRepository<Authorities, Integer> {
+
 }

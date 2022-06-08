@@ -33,7 +33,7 @@ public class Validator {
 
         if (bookDTO.getPublishedDate() == null){
             errors.add(new ValidatorDTO("publishedDate", AppResponseMessages.EMPTY_FIELD));
-        }else if (!DateHelper.isValidDate(bookDTO.getPublishedDate())){
+        }else if (!DateHelper.isValid(bookDTO.getPublishedDate())){
             errors.add(new ValidatorDTO("publishedDate", AppResponseMessages.DATE_FORMAT_YYYY_MM_DD));
         }
 

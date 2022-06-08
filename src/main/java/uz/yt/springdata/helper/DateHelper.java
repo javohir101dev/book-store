@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 
 public class DateHelper {
 
-    public static boolean isValidDate(String date){
+    public static boolean isValid(String date){
         if (date == null) return false;
         String format = "yyyy-MM-dd";
         DateFormat dateFormat = new SimpleDateFormat(format);
@@ -21,7 +21,7 @@ public class DateHelper {
     }
 
     public static Date toDate(String date){
-        return isValidDate(date) ? Date.valueOf(date) : null;
+        return isValid(date) ? Date.valueOf(date) : null;
     }
 
     public static String toString(Date date){

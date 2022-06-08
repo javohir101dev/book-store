@@ -56,6 +56,18 @@ public class Book {
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     private Publisher publisher;
 
+    @Column(name = "created_by")
+    private Integer createdBy;
+
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "updated_by")
+    private Integer updatedBy;
+
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
     public Book(Integer id, String nameUz, BigDecimal cost, Date publishedDate, Integer pageCount, String genre) {
         this.id = id;
         this.nameUz = nameUz;

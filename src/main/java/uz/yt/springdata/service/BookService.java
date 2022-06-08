@@ -5,15 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Streamable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.MultiValueMap;
-import uz.yt.springdata.dao.Author;
-import uz.yt.springdata.dao.Book;
-import uz.yt.springdata.dao.CustomBook;
-import uz.yt.springdata.dao.Publisher;
+import uz.yt.springdata.dao.*;
 import uz.yt.springdata.dto.BookDTO;
 import uz.yt.springdata.dto.ResponseDTO;
+import uz.yt.springdata.dto.UserInfoDTO;
 import uz.yt.springdata.dto.ValidatorDTO;
 import uz.yt.springdata.helper.NumberHelper;
 import uz.yt.springdata.helper.StringHelper;
@@ -28,6 +27,9 @@ import uz.yt.springdata.repository.impl.BookRepositoryImpl;
 import uz.yt.springdata.scheduling.ScheduleExample;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +67,11 @@ public class BookService {
                 return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND,
                         bookDTO, List.of(new ValidatorDTO("publisherId", AppResponseMessages.NOT_FOUND)));
             }
+
+            User userInfoDTO = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            book.setCreatedBy(userInfoDTO.getId());
+            book.setCreatedAt(Date.valueOf(LocalDate.now()));
 
             book.setAuthorId(author.get());
             book.setPublisher(publisher.get());
@@ -125,6 +132,11 @@ public class BookService {
             }
             Book book = _book.get();
             BookMapping.setEntity(book, bookDTO);
+
+            UserInfoDTO userInfoDTO = (UserInfoDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            book.setUpdatedBy(userInfoDTO.getId());
+            book.setUpdatedAt(Date.valueOf(LocalDate.now()));
 
             bookRepository.save(book);
 

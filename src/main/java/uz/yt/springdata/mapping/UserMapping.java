@@ -28,7 +28,8 @@ public class UserMapping {
                         user.getLastName(),
                         user.getPhoneNumber(),
                         user.getAccount(),
-                        user.getUsername()
+                        user.getUsername(),
+                        user.getPassword()
                 );
     }
 }

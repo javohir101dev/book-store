@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private String firstName;
     @Column(name = "lastname")
     private String lastName;
-    @Column(name = "phone_number")
+    @Column(name = "phonenumber")
     private String phoneNumber;
     @Column(name = "account")
     private BigDecimal account;
@@ -41,7 +41,7 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER,
     cascade = {CascadeType.ALL})
-    private List<Authorities> authorities;
+    private Set<Authorities> authorities;
 
     public User(Integer id, String firstName, String lastName, String phoneNumber, BigDecimal account, String password, String username) {
         this.id = id;

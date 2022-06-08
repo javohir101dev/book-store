@@ -8,6 +8,8 @@ import uz.yt.springdata.dto.AuthorDTO;
 import uz.yt.springdata.dto.BookDTO;
 import uz.yt.springdata.dto.PublisherDTO;
 import uz.yt.springdata.helper.DateHelper;
+import uz.yt.springdata.helper.NumberHelper;
+import uz.yt.springdata.helper.StringHelper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,9 +42,10 @@ public class BookMapping {
     }
 
     public static void setEntity(Book book, BookDTO bookDTO){
-        book.setNameUz(bookDTO.getName());
-        book.setGenre(bookDTO.getGenre());
-        book.setCost(bookDTO.getCost());
-        book.setId(bookDTO.getId());
+        if (StringHelper.isValid(bookDTO.getName())) book.setNameUz(bookDTO.getName());
+        if (StringHelper.isValid(bookDTO.getGenre())) book.setGenre(bookDTO.getGenre());
+        if (NumberHelper.isValid(bookDTO.getCost())) book.setCost(bookDTO.getCost());
+        if (NumberHelper.isValid(bookDTO.getPageCount())) book.setPageCount(bookDTO.getPageCount());
+        if (DateHelper.isValid(bookDTO.getPublishedDate())) book.setPublishedDate(DateHelper.toDate(bookDTO.getPublishedDate()));
     }
 }

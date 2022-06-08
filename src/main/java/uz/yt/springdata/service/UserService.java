@@ -3,6 +3,7 @@ package uz.yt.springdata.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.yt.springdata.auth.UserRoles;
@@ -47,10 +48,10 @@ public class UserService {
             Set<Authorities> authorities = UserRoles.GUEST.getPermissions().stream()
                     .map(sga -> new Authorities(sga.getAuthority()))
                     .collect(Collectors.toSet());
-            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-            List<Authorities> savedAuthorities = authoritiesRepository.saveAll(authorities);
 
-            user.setAuthorities(savedAuthorities);
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            user.setAuthorities(authorities);
+
             User savedUser = userRepository.save(user);
             return new ResponseDTO<>(true,
                     AppResponseCode.OK,
@@ -165,5 +166,10 @@ public class UserService {
         u.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(u);
         return new ResponseDTO<>(true, AppResponseCode.OK, AppResponseMessages.OK, UserMapping.toDto(u));
+    }
+
+    public ResponseDTO<UserDTO> currentUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return new ResponseDTO<>(true, AppResponseCode.OK, AppResponseMessages.OK, UserMapping.toDto(user));
     }
 }

@@ -29,6 +29,11 @@ public class UserResource {
         return  userService.getUserById(id);
     }
 
+    @GetMapping("/current")
+    public ResponseDTO<UserDTO> getCurrentUser(){
+        return userService.currentUser();
+    }
+
     @GetMapping
     public ResponseDTO<Page<User>>  getAllUsersPage(
             @RequestParam(name = "size", defaultValue = "5" ) Integer size,
