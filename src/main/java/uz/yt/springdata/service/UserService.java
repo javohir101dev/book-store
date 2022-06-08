@@ -45,9 +45,7 @@ public class UserService {
                                 userDTO.getUsername()), null, null);
             }
             User user = UserMapping.toEntity(userDTO);
-            Set<Authorities> authorities = UserRoles.GUEST.getPermissions().stream()
-                    .map(sga -> new Authorities(sga.getAuthority()))
-                    .collect(Collectors.toSet());
+            Set<Authorities> authorities = UserRoles.GUEST.getAuthorities();
 
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             user.setAuthorities(authorities);
@@ -58,6 +56,7 @@ public class UserService {
                     AppResponseMessages.OK,
                     UserMapping.toDto(savedUser), errors);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseDTO<>(false,
                     AppResponseCode.DATABASE_ERROR,
                     AppResponseMessages.DATABASE_ERROR,

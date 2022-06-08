@@ -39,8 +39,7 @@ public class User implements UserDetails {
     @Column(name = "username")
     private String username;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-    cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Authorities> authorities;
 
     public User(Integer id, String firstName, String lastName, String phoneNumber, BigDecimal account, String password, String username) {
