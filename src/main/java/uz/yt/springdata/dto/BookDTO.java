@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 
@@ -12,9 +13,17 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class BookDTO {
     private Integer id;
+    @NotBlank(message = "Name is empty")
+    @Digits(message = "Is not number", integer = 10, fraction = 2)
     private String name;
+    @NotNull(message = "Cost is empty")
+    @Min(value = 1000, message = "Less then 1 000 UZS")
+    @Max(value = 500000,  message = "More then 500 000 UZS")
     private BigDecimal cost;
+    @NotBlank(message = "Genre is empty")
     private String genre;
+    @Pattern(regexp = "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])",
+            message = "PublishedDate is not valid date")    //regex for date
     private String publishedDate;
     private Integer pageCount;
     private AuthorDTO author;
