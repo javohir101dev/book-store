@@ -6,16 +6,17 @@ import uz.yt.springdata.dao.Authorities;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static uz.yt.springdata.auth.UserPermissions.*;
 
 @Getter
 public enum UserRoles {
-    GUEST(Set.of(READ_BOOK, READ_DELIVERY, CREATE_ORDER_ITEMS, READ_ORDERS), "GUEST", 12),
-    ADMIN(Set.of(CREATE, UPDATE, READ, DELETE), "ADMIN", 13),
-    MODERATOR(Set.of(CREATE, UPDATE, READ), "MODERATOR", 14),
-    BOOK_MANAGER(Set.of(CREATE_BOOK, READ), "BOOK_MANAGER", 15),
-    SALES_MANAGER(Set.of(CREATE_ORDERS, READ, CREATE_DELIVERY), "SALES_MANAGER", 16);
+    GUEST(Stream.of(READ_BOOK, READ_DELIVERY, CREATE_ORDER_ITEMS, READ_ORDERS).collect(Collectors.toSet()), "GUEST", 12),
+    ADMIN(Stream.of(CREATE, UPDATE, READ, DELETE).collect(Collectors.toSet()), "ADMIN", 13),
+    MODERATOR(Stream.of(CREATE, UPDATE, READ).collect(Collectors.toSet()), "MODERATOR", 14),
+    BOOK_MANAGER(Stream.of(CREATE_BOOK, READ).collect(Collectors.toSet()), "BOOK_MANAGER", 15),
+    SALES_MANAGER(Stream.of(CREATE_ORDERS, READ, CREATE_DELIVERY).collect(Collectors.toSet()), "SALES_MANAGER", 16);
 
     private final Set<UserPermissions> permissions;
     private final String name;

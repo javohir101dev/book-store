@@ -30,9 +30,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,13 +57,13 @@ public class BookService {
             Optional<Author> author = authorRepository.findById(bookDTO.getAuthor().getId());
             if (!author.isPresent()){
                 return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND,
-                        bookDTO, List.of(new ValidatorDTO("authorId", AppResponseMessages.NOT_FOUND)));
+                        bookDTO, Collections.singletonList(new ValidatorDTO("authorId", AppResponseMessages.NOT_FOUND)));
             }
 
             Optional<Publisher> publisher = publisherRepository.findById(bookDTO.getPublisherDTO().getId());
             if (!publisher.isPresent()){
                 return new ResponseDTO<>(false, AppResponseCode.NOT_FOUND, AppResponseMessages.NOT_FOUND,
-                        bookDTO, List.of(new ValidatorDTO("publisherId", AppResponseMessages.NOT_FOUND)));
+                        bookDTO, Collections.singletonList(new ValidatorDTO("publisherId", AppResponseMessages.NOT_FOUND)));
             }
 
             User userInfoDTO = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
