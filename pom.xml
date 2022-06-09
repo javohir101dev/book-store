@@ -14,7 +14,7 @@
 	<name>spring-data</name>
 	<description>Spring Data JPA</description>
 	<properties>
-		<java.version>9</java.version>
+		<java.version>11</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
