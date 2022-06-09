@@ -14,8 +14,8 @@ public class UserMapping {
                         userDTO.getLastName(),
                         userDTO.getPhoneNumber(),
                         userDTO.getAccount(),
-                        userDTO.getUsername(),
-                        userDTO.getPassword()
+                        userDTO.getPassword(),
+                        userDTO.getUsername()
                 );
 
     }

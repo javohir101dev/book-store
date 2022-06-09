@@ -15,6 +15,7 @@ import uz.yt.springdata.repository.AuthoritiesRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -34,22 +35,22 @@ public class SpringDataApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (environment.getProperty("create.roles").equalsIgnoreCase("true")) {
-            List<Authorities> authorities = new ArrayList<>();
-            authorities.addAll(Arrays.stream(
+        if (Objects.requireNonNull(environment.getProperty("create.roles")).equalsIgnoreCase("true")) {
+            List<Authorities> allAuthoritiesForSaving = new ArrayList<>();
+            allAuthoritiesForSaving.addAll(Arrays.stream(
                     UserPermissions.values())
                     .map(e -> new Authorities(e.getId(), e.getName()))
                     .collect(Collectors.toList())
             );
-            authorities.addAll(
+            allAuthoritiesForSaving.addAll(
                     Arrays.stream(
                             UserRoles.values())
                             .map(e -> new Authorities(e.getId(), "ROLE_" +  e.getName()))
                             .collect(Collectors.toList())
             );
-
-
-            authoritiesRepository.saveAll(authorities);
+            List<Authorities> allSavedAuthorities = authoritiesRepository.findAll();
+            allAuthoritiesForSaving.removeAll(allSavedAuthorities);
+            authoritiesRepository.saveAll(allAuthoritiesForSaving);
         }
     }
 }

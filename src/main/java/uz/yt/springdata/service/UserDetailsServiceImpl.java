@@ -30,8 +30,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private AuthoritiesRepository authoritiesRepository;
-    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserSessionRedisRepository userSessionRedisRepository;
@@ -41,10 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findFirstByUsername(username);
-
-//        return user.orElse(null);
-        return user.orElseThrow(() -> new UsernameNotFoundException("User is not ofund"));
-        //        return user.orElse(null);
+        return user.orElse(null);
     }
 
     public ResponseDTO<String> getToken(UserLoginDto userLoginDto, HttpServletRequest request) {
