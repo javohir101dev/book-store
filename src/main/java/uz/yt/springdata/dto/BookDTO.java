@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 public class BookDTO {
     private Integer id;
     @NotBlank(message = "Name is empty")
-    @Digits(message = "Is not number", integer = 10, fraction = 2)
     private String name;
     @NotNull(message = "Cost is empty")
     @Min(value = 1000, message = "Less then 1 000 UZS")
