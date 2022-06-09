@@ -15,9 +15,6 @@ import uz.yt.springdata.dto.UserLoginDto;
 import uz.yt.springdata.helper.constants.AppResponseCode;
 import uz.yt.springdata.helper.constants.AppResponseMessages;
 import uz.yt.springdata.jwt.JwtUtil;
-import uz.yt.springdata.redis.UserSession;
-import uz.yt.springdata.redis.UserSessionRedisRepository;
-import uz.yt.springdata.repository.AuthoritiesRepository;
 import uz.yt.springdata.repository.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +28,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserSessionRedisRepository userSessionRedisRepository;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -57,15 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         );
         authenticationToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        String uuid = sysGuid();
-        String userString = toStringFromUser(user);
-        UserSession userSessionForCaching = UserSession
-                .builder()
-                .id(uuid)
-                .userInfo(userString)
-                .build();
-        userSessionRedisRepository.save(userSessionForCaching);
-        String token = jwtUtil.generateToken(uuid);
+        String token = jwtUtil.generateToken(user.getUsername());
         return new ResponseDTO<>(true, AppResponseCode.OK, AppResponseMessages.OK, token);
     }
 

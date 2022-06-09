@@ -5,13 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.yt.springdata.dao.User;
-import uz.yt.springdata.redis.UserSession;
-import uz.yt.springdata.redis.UserSessionRedisRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,7 +26,9 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
-    private UserSessionRedisRepository userSessionRedisRepository;
+    UserDetailsService userDetailsService;
+//    @Autowired
+//    private UserSessionRedisRepository userSessionRedisRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,13 +40,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 if (uuid == null){
                     throw new RuntimeException("Invalid token or cannot parse");
                 }
-                Optional<UserSession> userSession = userSessionRedisRepository.findById(uuid);
-                if (!userSession.isPresent()) {
-                    SecurityContextHolder.getContext().setAuthentication(null);
-                    throw new RuntimeException("Token is expired or invalid");
-                }
-                String cachedUserString = userSession.get().getUserInfo();
-                User user = fromStringToUser(cachedUserString);
+//                Optional<UserSession> userSession = userSessionRedisRepository.findById(uuid);
+//                if (!userSession.isPresent()) {
+//                    SecurityContextHolder.getContext().setAuthentication(null);
+//                    throw new RuntimeException("Token is expired or invalid");
+//                }
+//                String cachedUserString = userSession.get().getUserInfo();
+//                User user = fromStringToUser(cachedUserString);
+                UserDetails user = userDetailsService.loadUserByUsername(uuid);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         user,
                         null,
