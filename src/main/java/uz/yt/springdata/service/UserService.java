@@ -26,7 +26,6 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final AuthoritiesRepository authoritiesRepository;
 
 
     public ResponseDTO<UserDTO> addUser(UserDTO userDTO) {

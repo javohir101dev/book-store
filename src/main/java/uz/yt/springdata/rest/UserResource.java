@@ -17,11 +17,6 @@ public class UserResource {
         this.userService = userService;
     }
 
-//    CREATE  LOGIN
-    @PostMapping
-    public ResponseDTO<UserDTO> addUser(@RequestBody UserDTO userDTO){
-        return userService.addUser(userDTO);
-    }
 
 //    READ
     @GetMapping("/{id}")
